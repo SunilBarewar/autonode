@@ -1,16 +1,22 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { SignupForm } from "@/features/auth/components/signup-form";
-import { auth } from "@/lib/auth";
 import { PATH_NAMES } from "@/shared/constants";
+import { auth } from "./auth";
 
-export default async function SignupPage() {
+export const requireAuth = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    redirect(PATH_NAMES.SIGN_IN);
+  }
+};
+
+export const requireNoAuth = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   if (session) {
     redirect(PATH_NAMES.MAIN);
   }
-
-  return <SignupForm />;
-}
+};

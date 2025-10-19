@@ -17,6 +17,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Autonode",
   description: "Authnode is an AI automation platform",
+  icons: "/images/logo.svg",
 };
 
 export default function RootLayout({

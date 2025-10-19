@@ -22,7 +22,7 @@
         "noUnknownAtRules": "off"
       },
       "nursery": {
-        "useSortedClasses": "warn"
+        "useSortedClasses": "off"
       }
     },
     "domains": {
