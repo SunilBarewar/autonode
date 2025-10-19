@@ -5,5 +5,8 @@
     "source.organizeImports.biome": "explicit",
     "source.fixAll.biome": "always",
     "source.addMissingImports.ts": "explicit"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   }
 }
