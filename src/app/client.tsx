@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
 
 const Client = () => {

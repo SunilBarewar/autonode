@@ -1,20 +1,20 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { HydrateClient, prefetch, trpc } from "@/trpc/server";
+import { withAuth } from "@/hocs/with-auth";
+import { caller, HydrateClient } from "@/trpc/server";
 import Client from "./client";
+import LogoutButton from "./LogoutButton";
 
-export default function Home() {
-  prefetch(trpc.getUsers.queryOptions());
+async function Home() {
+  const users = await caller.getUsers();
 
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <HydrateClient>
-        <ErrorBoundary fallback={<div>Something went wrong</div>}>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Client />
-          </Suspense>
-        </ErrorBoundary>
-      </HydrateClient>
+    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-sans sm:p-20">
+      <p>{JSON.stringify(users, null, 2)}</p>
+
+      <LogoutButton />
     </div>
   );
 }
+
+export default withAuth(Home);
