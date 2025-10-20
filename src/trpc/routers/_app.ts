@@ -1,4 +1,3 @@
-import { email } from "zod";
 import { inngest } from "@/inngest/client";
 import prisma from "@/lib/prisma";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
@@ -20,6 +19,13 @@ export const appRouter = createTRPCRouter({
       data: {
         email: "sunil@gmail.com",
       },
+    });
+
+    return { success: true, message: "Job queued" };
+  }),
+  testAi: protectedProcedure.mutation(async () => {
+    await inngest.send({
+      name: "generate/text",
     });
 
     return { success: true, message: "Job queued" };
