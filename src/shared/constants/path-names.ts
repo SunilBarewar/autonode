@@ -7,6 +7,9 @@ export const PATH_NAMES = {
   PROFILE: "/profile",
   SETTINGS: "/settings",
   NOT_FOUND: "/not-found",
+  WORKFLOWS: "/workflows",
+  EXECUTIONS: "/executions",
+  CREDENTIALS: "/credentials",
 };
 
 export const APP_NAME = "Autonode";
