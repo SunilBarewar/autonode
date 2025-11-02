@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import {
   CreditCardIcon,
   FolderOpenIcon,
@@ -21,8 +22,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useHasActiveSubscription } from "@/features/subscriptions/hooks/use-subscription";
 import { authClient } from "@/lib/auth-client";
-import { APP_NAME, PATH_NAMES } from "@/shared/constants";
+import { APP_NAME, PATH_NAMES, PRODUCT_SLUGS } from "@/shared/constants";
 
 const menuItems = [
   {
@@ -50,19 +52,31 @@ const menuItems = [
 const AppSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const queryClient = useQueryClient();
+  const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
 
   const footerItems = [
     {
       title: "Upgrade to Pro",
       icon: StarIcon,
+      isVisible: !hasActiveSubscription && !isLoading,
+      onClick() {
+        authClient.checkout({ slug: PRODUCT_SLUGS.NODE_TRIGGER });
+      },
     },
     {
       title: "Billing Portal",
       icon: CreditCardIcon,
+      isVisible: true,
+      onClick() {
+        authClient.customer.portal();
+      },
     },
     {
       title: "Sign Out",
       icon: LogOutIcon,
+      isVisible: true,
+
       onClick: () => {
         authClient.signOut({
           fetchOptions: {
@@ -71,6 +85,7 @@ const AppSidebar = () => {
             },
           },
         });
+        queryClient.clear();
       },
     },
   ];
@@ -129,16 +144,18 @@ const AppSidebar = () => {
         <SidebarMenu>
           {footerItems.map((item) => {
             return (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  tooltip={item.title}
-                  className="gap-x-4 h-10 px-4"
-                  onClick={item.onClick}
-                >
-                  {item.icon && <item.icon className="size-4" />}
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              item.isVisible && (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    className="gap-x-4 h-10 px-4"
+                    onClick={item.onClick}
+                  >
+                    {item.icon && <item.icon className="size-4" />}
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )
             );
           })}
         </SidebarMenu>
